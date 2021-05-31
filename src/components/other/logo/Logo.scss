@@ -1,0 +1,22 @@
+@import "../../../scss/variables";
+
+.logo-content {
+  @include flex-center;
+  height: 50px;
+  width: 200px;
+  background-color: #ffffffb0;
+  border-radius: 4px;
+  border-bottom-right-radius: 20px;
+  font-size: 18px;
+  font-family: 'Monoton', cursive;
+
+  & a {
+    color: rgba(0, 0, 0, 0.85);
+  }
+}
+
+.logo-image {
+  & img {
+    width: 60px;
+  }
+}

@@ -1,0 +1,16 @@
+.search-content {
+  display: inherit;
+  width: 210px;
+  transition: width .8s;
+
+  &.focus {
+    width: 400px;
+  }
+
+  & > span > span {
+    & input, button {
+      background-color: #f3f3f3;
+    }
+
+  }
+}

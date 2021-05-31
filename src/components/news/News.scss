@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo:ital,wght@0,400;1,300;1,400&display=swap');
+@import "../../scss/variables";
+
+.single-news-section {
+  margin-top: 100px;
+}
+
+.single-news {
+  position: relative;
+  padding: 15px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0 1px 2px 0, rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
+  background-color: #c4c4c41c;
+  height: 100%;
+
+  & .ant-descriptions-header {
+    flex-direction: row-reverse;
+    align-items: inherit;
+  }
+
+  & .ant-descriptions-extra {
+    margin-right: 10px;
+  }
+
+  & .ant-descriptions-title {
+    @include flex-center;
+    font-family: $font-family-title;
+    white-space: normal;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 5px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+  }
+
+  & .ant-descriptions-item-label {
+    font-weight: 600;
+  }
+
+  & .ant-descriptions-item-content {
+    font-family: 'Chivo', sans-serif;
+  }
+
+  & .single-news-info-block .ant-descriptions-item-content {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  & .single-time-line {
+    & > span {
+      margin: 0 5px;
+    }
+  }
+}
+
+.single-news-image {
+  position: relative;
+  padding: 15px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0 1px 2px 0, rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
+  background-color: #c4c4c41c;
+}

@@ -1,0 +1,6 @@
+@import "../../scss/variables";
+
+.not-found-ant {
+  height: 100vh;
+  @include flex-center;
+}

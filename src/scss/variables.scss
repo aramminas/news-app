@@ -1,0 +1,12 @@
+$color-black: #111;
+$font-family-title: 'Open Sans Condensed', sans-serif;
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+@mixin flex-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}

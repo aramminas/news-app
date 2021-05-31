@@ -1,0 +1,13 @@
+.ant-layout header.ant-layout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #c4c4c4;
+}
+
+.main-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+}

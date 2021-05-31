@@ -1,0 +1,14 @@
+@import "../../../scss/variables";
+
+.no-more-new {
+  color: $color-black;
+  font-family: $font-family-title;
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & span:nth-child(2){
+    margin-left: 15px;
+  }
+}

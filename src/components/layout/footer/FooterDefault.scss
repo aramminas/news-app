@@ -1,0 +1,32 @@
+footer.ant-layout-footer {
+  font-family: cursive;
+  border-top: 1px solid grey;
+  font-size: 18px;
+  padding: 10px 50px;
+  text-align: center;
+}
+
+.footer-link {
+
+  & img {
+    width: 50px;
+  }
+
+}
+
+.footer-link:hover {
+  text-decoration: none;
+}
+
+//@keyframes rotating {
+//  from {
+//    transform: rotate(0deg);
+//  }
+//  to {
+//    transform: rotate(360deg);
+//  }
+//}
+
+.rotating {
+  animation: rotating 15s linear infinite;
+}

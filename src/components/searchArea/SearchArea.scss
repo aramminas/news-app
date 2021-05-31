@@ -1,0 +1,47 @@
+@import "../../scss/variables";
+
+.search-area {
+  padding-top: 30px;
+}
+
+.search-box {
+  background-color: #c4c4c41c;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.ant-checkbox-wrapper {
+  margin-bottom: 5px;
+}
+
+.divider-title, .sort-title {
+  font-family: $font-family-title;
+}
+
+.sort-title {
+  color: $color-black;
+  font-size: 22px;
+}
+
+.sort-select {
+  color: $color-black;
+  font-size: 18px;
+}
+
+.sort-action-block {
+  @include flex-end;
+  margin-bottom: 16px;
+}
+
+/* Search result items */
+.search-result-items {
+  & ul li.ant-list-item {
+    flex-direction: row-reverse;
+    background-color: #c4c4c41c;
+    margin-bottom: 15px;
+
+    & .ant-list-item-extra {
+      margin: 0 10px 0 0;
+    }
+  }
+}
