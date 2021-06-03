@@ -1,4 +1,4 @@
-import {ADD_FILTERED_NEWS, ADD_NEXT_VIEW_PART_NEWS, CLEAR_VIEW_NEWS, ADD_SINGLE_NEWS} from "../constants";
+import {ADD_FILTERED_NEWS, ADD_NEXT_VIEW_PART_NEWS, CLEAR_VIEW_NEWS, ADD_SINGLE_NEWS, SEARCH_NEWS} from "../constants";
 
 const initState = {
     news: [],
@@ -9,6 +9,7 @@ const initState = {
 const newsReducer = (state= initState, {type, payload}) => {
     switch (type) {
         case ADD_FILTERED_NEWS:
+        case SEARCH_NEWS:
             return {
                 ...state,
                 news: [...payload],

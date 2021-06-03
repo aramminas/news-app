@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import {useDispatch} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {Col, Row, Select, message} from "antd";
 import {useParams} from "react-router-dom";
 
@@ -16,10 +16,13 @@ const offset = 0;
 
 const SearchResult = () => {
     const dispatch = useDispatch();
+    const {news} = useSelector(state => state.news);
     const { id } = useParams();
 
     useEffect(() => {
-        dispatch(add_filtered_news(id, offset, limit));
+        if(news.length === 0){
+            dispatch(add_filtered_news(id, offset, limit));
+        }
     }, []);
 
     const onHandleSort = (sort) => {

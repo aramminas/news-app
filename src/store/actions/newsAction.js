@@ -1,5 +1,5 @@
 import API from "../../api/Api";
-import {ADD_FILTERED_NEWS, ADD_NEXT_VIEW_PART_NEWS, ADD_SINGLE_NEWS, CLEAR_VIEW_NEWS} from "../constants";
+import {ADD_FILTERED_NEWS, ADD_NEXT_VIEW_PART_NEWS, ADD_SINGLE_NEWS, CLEAR_VIEW_NEWS, SEARCH_NEWS} from "../constants";
 import {message} from "antd";
 
 export const add_filtered_news = (id, offset, limit) => dispatch => {
@@ -21,6 +21,21 @@ export const add_filtered_news = (id, offset, limit) => dispatch => {
 export const add_filtered_sorted_news = (id, sort, offset, limit) => dispatch => {
     API.sortNewsBy(id, sort).then(data => {
         dispatch({type: ADD_FILTERED_NEWS, payload : data});
+        const nextNews = data.slice(offset, limit);
+        dispatch({type: CLEAR_VIEW_NEWS, payload: true});
+        dispatch({type: ADD_NEXT_VIEW_PART_NEWS, payload : [...nextNews]});
+    }).catch(error => {
+        if(error.error){
+            error.error.forEach(err => {
+                message.error(err);
+            });
+        }
+    });
+}
+
+export const search_news = (offset, limit, ...rest) => dispatch => {
+    API.searchNews(rest).then(data => {
+        dispatch({type: SEARCH_NEWS, payload : data});
         const nextNews = data.slice(offset, limit);
         dispatch({type: CLEAR_VIEW_NEWS, payload: true});
         dispatch({type: ADD_NEXT_VIEW_PART_NEWS, payload : [...nextNews]});

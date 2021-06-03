@@ -74,7 +74,7 @@ const SearchResultItems = ({limit}) => {
                 dataSource={show}
                 renderItem={ item => (
                     <List.Item
-                        key={item.title}
+                        key={`${item.title}-${item.author}`}
                         actions={[
                             <IconText icon={UserOutlined} text={item.author} key="list-vertical" />,
                             <IconText icon={LinkOutlined} text={
