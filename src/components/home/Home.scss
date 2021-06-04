@@ -1,11 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@700&display=swap');
 @import "../../scss/variables";
-
+.ant-layout-content {
+  background: #F0F2F5;
+}
 .main-content {
   margin-top: 64px;
   padding-top: 10px;
   margin-bottom: 30px;
-
+  background: #F0F2F5;
   & h1 {
     color: $color-black;
     font-family: $font-family-title;
@@ -19,12 +21,52 @@
   }
 }
 
+@-webkit-keyframes hover {
+  from {
+    background: transparent;
+    color: #AFB1FF;
+  }
+  to {
+    background: #AFB1FF;
+    color: white;
+    
+  }
+}
+
+/* Standard syntax */
+@keyframes hover {
+  from {
+    background: transparent;
+    color: #40A9FF;
+  }
+  to {
+    background: #40A9FF;
+    color: white;
+    
+  }
+}
+
 /* Cart section */
 #news-card {
   & .ant-card-head, & .ant-card-body, & .ant-card-actions  {
-    background-color: #c4c4c4;
     text-align: center;
+;
   }
+
+  & .sourceButton{
+    border: 1px solid #40A9FF;
+    border-radius: 5px;
+    padding: 5px 10px 5px 10px;
+  }
+
+  & .sourceButton:hover {
+    -webkit-animation-name: hover;
+    -webkit-animation-duration: 0.5s;
+    animation-name: hover;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+  }
+  
 
   & .ant-card-head a {
     color: $color-black;
@@ -39,6 +81,11 @@
 
   & .ant-card {
     margin: 25px;
+    border-color: #e3e3e3;
+  }
+
+  & .ant-card-actions, & .ant-card {
+    border-radius: 10px;
   }
 
   & .ant-card-body {
@@ -66,4 +113,3 @@
     rgba(255, 255, 255, 0.08) 0 1px 0 inset;
   }
 }
-
