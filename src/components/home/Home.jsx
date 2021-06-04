@@ -11,7 +11,7 @@ import {get_sources, add_next_view_part_sources} from "../../store/actions/sourc
 /* components */
 import LayoutWrapper from "../layout/LayoutWrapper";
 import LoadMore from "../other/loadMore/LoadMore";
-import NoMoreNews from "../other/noMoreNews/NoMoreNews";
+import NoMoreSources from "../other/noMoreSources/NoMoreSources";
 
 /* styles */
 import "./Home.scss";
@@ -62,7 +62,7 @@ const Home = () => {
                         { !maxCount ?
                             <LoadMore />
                             :
-                            <NoMoreNews />
+                            <NoMoreSources />
                         }
                     </>
                 }
@@ -103,7 +103,7 @@ const Home = () => {
                      <Row id="news-card">
                          <Col span={24}>
                              <div className="empty-result">
-                                 <Empty description={'News not found!'} />
+                                 <Empty description={'Sources not found!'} />
                              </div>
                          </Col>
                      </Row>
