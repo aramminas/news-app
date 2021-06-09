@@ -4,6 +4,7 @@ const initState = {
     news: [],
     show: [],
     single: {},
+    empty: false,
 };
 
 const newsReducer = (state= initState, {type, payload}) => {
@@ -18,6 +19,7 @@ const newsReducer = (state= initState, {type, payload}) => {
             return {
                 ...state,
                 show: [],
+                empty: payload,
             }
         case ADD_NEXT_VIEW_PART_NEWS:
             let mergeNewNews = [...state.show];
@@ -25,6 +27,7 @@ const newsReducer = (state= initState, {type, payload}) => {
             return {
                 ...state,
                 show: [...mergeNewNews],
+                empty: false,
             };
         case ADD_SINGLE_NEWS:
             return {

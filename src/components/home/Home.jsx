@@ -18,7 +18,7 @@ import "./Home.scss";
 
 /* constants */
 import data from "../../constants";
-const {countries, categories, languages} = data;
+const {countries, categories, languages, sourceType} = data;
 
 const limit = 9;
 const initOffset = 0;
@@ -71,7 +71,7 @@ const Home = () => {
                     { show.map(source => (
                         <Col span={8} key={source.id}>
                             <Card
-                                title={<span><Link to={`/search/${source.id}`}>{source.name}</Link></span>}
+                                title={<span><Link to={`/search/${sourceType}=${source.id}`}>{source.name}</Link></span>}
                                 actions={[
                                     <span>{categories[source.category]}</span>,
                                     <span>{languages[source.language]}</span>,

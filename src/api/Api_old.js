@@ -1,10 +1,8 @@
 import axios from "axios";
 
 // const API_KEY = '6eac78c03d5f4707a6cf512760486f20';
-const API_KEY = '274a131a563d46d08a469bf24b993161';
+const API_KEY = 'fa9c7a65231c410a951dc199d7fadd2e';
 // const API_KEY = '94aad3b0f5724fbf837650256d548bbc';
-// const API_KEY = '87d85a44e2d4456a825191c18cd5ea31';
-// const API_KEY = 'fa9c7a65231c410a951dc199d7fadd2e';
 const URL = 'https://newsapi.org/v2';
 
 const getSources = () => {
@@ -40,7 +38,7 @@ const getSources = () => {
 const getNewsBySourceId = (params) => {
     const {id} = params;
     return new Promise((resolve, reject) => {
-        axios.get(`${URL}/top-headlines?${id}&apiKey=${API_KEY}`)
+        axios.get(`${URL}/top-headlines?sources=${id}&apiKey=${API_KEY}`)
             .then(function (response) {
                 // handle success
                 const { data } = response;
@@ -90,34 +88,24 @@ const sortNewsBy = (params, sort) => {
 }
 
 const searchNews = (searchData) => {
-    let [search, country, category, source] = searchData;
+    let [search, country, category, source, language] = searchData;
 
     let tempUrl = "";
-    let mainParam = "";
-    let isParam = false;
+    const isEmpty = search !== "" || source !== "";
 
-    if((search && search !== "-") && (source === "-" || !source)){
-        /* when there is a search parameter the source parameter is ignored */
-        mainParam = `everything?${search}`;
-        isParam = true;
-    }else if(source && source !== "-"){
-        isParam = true;
-        if(source !== "-" && (search !== "-" && search)){
-            mainParam = `top-headlines?${search}`;
-        }else{
-            mainParam = `top-headlines?${source}`;
-        }
-    }else {
-        mainParam = "top-headlines?";
+    // API limitation (We cannot mix the sources parameter with the country or category parameters.)
+    if (source === ""){
+        tempUrl += isEmpty && country !== "" ? `&${country}` : country;
+        tempUrl += tempUrl !== "" && category !== "" ? `&${category}` : category !== "" && isEmpty ? `&${category}` : category;
     }
 
-    //the "Sources" parameter is not compatible with the "Countries" and "Categories" parameters"
-    if(source === "-"){
-        tempUrl += country === "-" || !country ? "" : isParam ? `&${country}` : country;
-        tempUrl += !category ? "" : isParam ? `&${category}` : tempUrl !== "" ? `&${category}` : category;
-    }
+    tempUrl += tempUrl !== "" && language !== "" ? `&${language}` : language !== "" && isEmpty ?  `&${language}` : language;
 
-    const searchURL = `${URL}/${mainParam}${tempUrl}&apiKey=${API_KEY}`;
+    const mainParamStepOne = search !== "" ? `everything?q=${search}` : "top-headlines?";
+    const mainParamStepTwo = source !== "" && search === "" ? `${mainParamStepOne}${source}` : "";
+    const finalParam = mainParamStepTwo === "" ? mainParamStepOne : mainParamStepTwo;
+
+    const searchURL = `${URL}/${finalParam}${tempUrl}&apiKey=${API_KEY}`;
 
     return new Promise((resolve, reject) => {
         axios.get(searchURL)

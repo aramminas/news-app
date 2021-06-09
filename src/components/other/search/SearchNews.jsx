@@ -12,6 +12,8 @@ import history from "../../../history/history";
 import "./SearchNews.scss";
 
 /* constants */
+import data from "../../../constants";
+const {searchType} = data;
 const limit = 4;
 const offset = 0;
 
@@ -20,8 +22,9 @@ const SearchNews = () => {
     const [width, setWidth] = useState('');
 
     const searchUpdated = (val) => {
-        dispatch(search_news(offset, limit, val));
-        history.push(`/search/${val}`);
+        const searchP = `${searchType}=${val}`
+        dispatch(search_news(offset, limit, searchP));
+        history.push(`/search/-/${val}`);
     }
 
     const resizeInput = (type) => {

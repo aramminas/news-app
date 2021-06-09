@@ -81,6 +81,11 @@ const data = {
         'zh': 'Chinese',
     },
     defaultImage: '/assets/images/default-news.jpg',
+    searchType : 'q',
+    countryType : 'country',
+    categoryType : 'category',
+    sourceType : 'sources',
+    languageType : 'language',
 };
 
 export default data;

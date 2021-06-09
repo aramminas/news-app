@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
+import PropTypes from 'prop-types';
 import history from "../../history/history";
 import {List, Space, Image} from 'antd';
 import {FieldTimeOutlined, UserOutlined, LinkOutlined} from '@ant-design/icons';
@@ -12,6 +13,7 @@ import {add_next_view_part_news, add_single_news} from "../../store/actions/news
 /* components */
 import LoadMore from "../other/loadMore/LoadMore";
 import NoMoreNews from "../other/noMoreNews/NoMoreNews";
+import EmptyParams from "../other/emptyParams/EmptyParams";
 
 /* constants */
 import data from "../../constants";
@@ -24,14 +26,18 @@ const IconText = ({ icon, text }) => (
     </Space>
 );
 
+IconText.propTypes = {
+    icon: PropTypes.any.isRequired,
+    text: PropTypes.string.isRequired,
+}
+
 const SearchResultItems = ({limit}) => {
     const [offset, setOffset] = useState(limit);
     const [maxCount, setMaxCount] = useState(false);
-    const {news, show} = useSelector(state => state.news);
+    const {news, show, empty} = useSelector(state => state.news);
     const dispatch = useDispatch();
 
     const fetchMoreData = () => {
-        if (maxCount) return true;
 
         setTimeout(() => {
             const length = news.length;
@@ -43,7 +49,7 @@ const SearchResultItems = ({limit}) => {
             if(offset >= length){
                 setMaxCount(true);
             }
-        }, 1500);
+        }, 500);
     };
 
     const singleNews = (e, item) => {
@@ -52,6 +58,14 @@ const SearchResultItems = ({limit}) => {
         dispatch(add_single_news(item));
     }
 
+    /* empty parameters view */
+    if (empty) {
+        return (
+            <EmptyParams />
+        );
+    }
+
+    /* main component view */
     return (
         <InfiniteScroll
             dataLength={show.length}
@@ -104,6 +118,10 @@ const SearchResultItems = ({limit}) => {
             />
         </InfiniteScroll>
     );
+}
+
+SearchResultItems.propTypes = {
+    limit: PropTypes.number.isRequired
 }
 
 export default SearchResultItems;

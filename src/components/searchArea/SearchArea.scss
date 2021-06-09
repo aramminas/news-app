@@ -26,6 +26,10 @@
 .sort-select {
   color: $color-black;
   font-size: 18px;
+
+  & > span {
+    display: none;
+  }
 }
 
 .sort-action-block {
