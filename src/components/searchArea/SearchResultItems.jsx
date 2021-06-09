@@ -6,6 +6,7 @@ import {List, Space, Image} from 'antd';
 import {FieldTimeOutlined, UserOutlined, LinkOutlined} from '@ant-design/icons';
 import InfiniteScroll from "react-infinite-scroll-component";
 import Moment from "react-moment";
+import {Animated} from "react-animated-css";
 
 /* actions */
 import {add_next_view_part_news, add_single_news} from "../../store/actions/newsAction";
@@ -27,8 +28,8 @@ const IconText = ({ icon, text }) => (
 );
 
 IconText.propTypes = {
-    icon: PropTypes.any.isRequired,
-    text: PropTypes.string.isRequired,
+    icon: PropTypes.object.isRequired,
+    text: PropTypes.object.isRequired,
 }
 
 const SearchResultItems = ({limit}) => {
@@ -86,34 +87,36 @@ const SearchResultItems = ({limit}) => {
                 itemLayout="vertical"
                 size="large"
                 dataSource={show}
-                renderItem={ item => (
-                    <List.Item
-                        key={`${item.title}-${item.author}`}
-                        actions={[
-                            <IconText icon={UserOutlined} text={item.author} key="list-vertical" />,
-                            <IconText icon={LinkOutlined} text={
-                                <a href={item.url}>{item.source.name}</a>
-                            } key="list-vertical" />,
-                            <IconText icon={FieldTimeOutlined} text={
-                                <Moment format="YYYY-MM-DD h:mm a">
-                                    {item.publishedAt}
-                                </Moment>
-                            } key="list-vertical" />,
-                        ]}
-                        extra={
-                            <Image
-                                width={272}
-                                alt="news"
-                                src={item.urlToImage ? item.urlToImage : defaultImage}
+                renderItem={ (item, index) => (
+                    <Animated animationIn="slideInRight" animationInDuration={1000 + index * 100} isVisible={true}>
+                        <List.Item
+                            key={`${item.title}-${item.author}`}
+                            actions={[
+                                <IconText icon={UserOutlined} text={<>item.author</>} key="list-vertical" />,
+                                <IconText icon={LinkOutlined} text={
+                                    <a href={item.url}>{item.source.name}</a>
+                                } key="list-vertical" />,
+                                <IconText icon={FieldTimeOutlined} text={
+                                    <Moment format="YYYY-MM-DD h:mm a">
+                                        {item.publishedAt}
+                                    </Moment>
+                                } key="list-vertical" />,
+                            ]}
+                            extra={
+                                <Image
+                                    width={272}
+                                    alt="news"
+                                    src={item.urlToImage ? item.urlToImage : defaultImage}
+                                />
+                            }
+                        >
+                            <List.Item.Meta
+                                title={<a href={`/`} onClick={(e) => singleNews(e,item)}>{item.title}</a>}
+                                description={item.description}
                             />
-                        }
-                    >
-                        <List.Item.Meta
-                            title={<a href={`/`} onClick={(e) => singleNews(e,item)}>{item.title}</a>}
-                            description={item.description}
-                        />
-                        {item.content}
-                    </List.Item>
+                            {item.content}
+                        </List.Item>
+                    </Animated>
                 )}
             />
         </InfiniteScroll>

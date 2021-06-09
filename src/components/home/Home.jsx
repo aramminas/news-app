@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {Card, Empty, Row, Col} from "antd";
 import { LinkOutlined } from '@ant-design/icons';
 import InfiniteScroll from "react-infinite-scroll-component";
+import {Animated} from "react-animated-css";
 
 /* actions */
 import {get_sources, add_next_view_part_sources} from "../../store/actions/sourcesAction";
@@ -94,7 +95,9 @@ const Home = () => {
              <div className="site-card-wrapper main-content">
                  <Row>
                      <Col span={24}>
-                         <h1>Sources</h1>
+                         <Animated animationIn="pulse" animationInDuration={2000} isVisible={true}>
+                             <h1>Sources</h1>
+                         </Animated>
                      </Col>
                  </Row>
                  { show.length > 0 ?
