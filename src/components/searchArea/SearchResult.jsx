@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {Col, Row, Select, message} from "antd";
 import { CaretUpOutlined, CaretDownOutlined } from '@ant-design/icons';
-import {useParams} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 
 /* actions */
 import {add_filtered_news, add_filtered_sorted_news, search_news, clear_view_news} from "../../store/actions/newsAction";
@@ -11,7 +11,8 @@ import {add_filtered_news, add_filtered_sorted_news, search_news, clear_view_new
 import SearchResultItems from "./SearchResultItems";
 /* constants */
 import data from "../../constants";
-const {searchType, countryType, categoryType} = data;
+import {makeGetParam} from "../../helpers/helpers";
+const {searchType, countryType, categoryType, sourceType} = data;
 const { Option } = Select;
 
 const limit = 4;
@@ -20,22 +21,42 @@ const offset = 0;
 const SearchResult = () => {
     const dispatch = useDispatch();
     const {news, show} = useSelector(state => state.news);
-    const params = useParams();
+    const {search} = useLocation();
 
     useEffect(() => {
-        if(news.length === 0 && (params.id !== "-" && params.id !== undefined)){
-            dispatch(add_filtered_news(params, offset, limit));
+        const sources = new URLSearchParams(search).get(sourceType);
+
+        if(news.length === 0 && (sources !== null && sources !== '')){
+            dispatch(add_filtered_news({sources: `${sourceType}=${sources}`}, offset, limit));
         }else {
-            const {category, country, id, q} = params;
-            const searchP = q && q !== "-" && q.includes(searchType) ? q : q && !q.includes(searchType) && q !== "-" ? `${searchType}=${q}` : "";
-            const countryP = country && country.includes(countryType) ? country : country && !country.includes(countryType) ? `${countryType}=${country}` : "";
-            const categoryP = category && category.includes(categoryType) ? category : category && !category.includes(categoryType) ? `${categoryType}=${category}`: "";
-            const sourceP = id ? `${id}` : "";
-            const paramsData = [searchP, countryP, categoryP, sourceP];
-            if(!searchP && !countryP && !categoryP && !sourceP){
+            if(search === ""){
                 dispatch(clear_view_news(true));
             }else{
-                dispatch(search_news(offset, limit, ...paramsData));
+                const searchP = new URLSearchParams(search).get(searchType);
+                const country = new URLSearchParams(search).get(countryType);
+                const category = new URLSearchParams(search).get(categoryType);
+
+                let searchParam = "";
+                let currentURL = "";
+
+                const sourceParam = sources ? makeGetParam(sources, sourceType, currentURL) : "";
+                currentURL += sourceParam;
+
+                /* while searching for a source , the term parameter is ignored because they are incompatible */
+                if(sourceParam === ""){
+                    currentURL += searchParam = searchP ? `?q=${searchP}` : "";
+                }
+
+                const countryParam = country ? makeGetParam(country, countryType, currentURL) : "";
+                currentURL += countryParam;
+
+                const categoryParam = category ? makeGetParam(category, categoryType, currentURL) : "";
+
+                const searchData = [
+                    offset, limit, searchParam,
+                    countryParam, categoryParam, sourceParam,
+                ];
+                dispatch(search_news(...searchData));
             }
         }
     }, []);

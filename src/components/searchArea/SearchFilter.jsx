@@ -1,9 +1,9 @@
 import {useState, useEffect} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {useParams} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 /* antd components */
 import {Button, Checkbox, Col, Divider, Form, Input, Row} from "antd";
-import {UndoOutlined} from "@ant-design/icons";
+import {UndoOutlined, ArrowLeftOutlined} from "@ant-design/icons";
 
 /* actions */
 import {search_news, clear_view_news} from "../../store/actions/newsAction";
@@ -12,6 +12,7 @@ import {get_sources} from "../../store/actions/sourcesAction";
 /* constants */
 import data from "../../constants";
 import history from "../../history/history";
+import {makeGetParam} from "../../helpers/helpers";
 const {countries, categories, searchType, countryType, categoryType , sourceType} = data;
 
 const layout = {
@@ -27,7 +28,7 @@ const limit = 4;
 const offset = 0;
 
 const SearchFilter = () => {
-    const {category, country, id , q} = useParams();
+    const {search: params} = useLocation();
     const dispatch = useDispatch();
     const {sources} = useSelector(state => state.sources);
     const [searchText, setSearchText] = useState("");
@@ -42,32 +43,40 @@ const SearchFilter = () => {
         }
 
         /* when a mounting component, we check the URL parameters and adding default values */
-        const initSearch = q && q !== "-" ? q.replace(`${searchType}=`, "") : "";
+        const searchP = new URLSearchParams(params).get(searchType);
+        const countryP = new URLSearchParams(params).get(countryType);
+        const categoryP = new URLSearchParams(params).get(categoryType);
+        const sourcesP = new URLSearchParams(params).get(sourceType);
+        const initSearch = searchP ? searchP.split(',') : "";
         setSearchText(initSearch);
 
-        const initCountries = getSelectedParams(country, `${countryType}=`) || [];
+        const initCountries = getSelectedParams(countryP) || [];
         setCountriesList(initCountries);
 
-        const initCategories = getSelectedParams(category, `${categoryType}=`) || [];
+        const initCategories = getSelectedParams(categoryP) || [];
         setCategoriesList(initCategories);
 
-        const initSources = getSelectedParams(id, `${sourceType}=`) || [];
+        const initSources = getSelectedParams(sourcesP) || [];
         setSourcesList(initSources);
     }, []);
 
     const onFinish = ({search}) => {
-        const countryParam = makeGetParam(countriesList, countryType) || "-";
-        const categoryParam = makeGetParam(categoriesList, categoryType) || "-";
-        const searchParam = search && search !== "-" ? `q=${search}` : "-";
+        let currentURL = "";
+        const searchParam = search !== null && search !== "" ? `?q=${search}` : "";
+        currentURL += searchParam;
+        const countryParam = makeGetParam(countriesList, countryType, currentURL) || "";
+        currentURL += countryParam;
+        const categoryParam = makeGetParam(categoriesList, categoryType, currentURL) || "";
+        currentURL += categoryParam;
 
         /* while searching for a term, the source parameter is ignored because they are incompatible */
-        const searchParamsData = [searchParam, countryParam, categoryParam , "-"];
+        const searchParamsData = [searchParam, countryParam, categoryParam , ""];
         dispatch(search_news(offset, limit, ...searchParamsData));
 
         setSearchText(search);
         setSourcesList([]);
 
-        history.push(`/search/-/${searchParam}/${countryParam}/${categoryParam}`);
+        history.push(`/search/${currentURL}`);
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -80,7 +89,7 @@ const SearchFilter = () => {
         setCategoriesList([]);
         setSourcesList([]);
         dispatch(clear_view_news(true));
-        history.push(`/search/-`);
+        history.push(`/search`);
     }
 
     const onChange = (checkedValues, type = "") => {
@@ -115,40 +124,41 @@ const SearchFilter = () => {
     }
 
     const onSearchChange = (e) => {
-        setSearchText(e.target.value);
+        const value = e.target.value;
+        setSearchText(value);
+        if(value === ""){
+            onFinish({search: value});
+        }
     }
 
     const searchNewsUpdate = (data, type) => {
+        let searchParam = "";
+        let currentURL = "";
 
-        const countryParam = type === countryType ? makeGetParam(data, countryType) || "-" : makeGetParam(countriesList, countryType) || "-";
-        const sourceParam = type === sourceType ? makeGetParam(data, sourceType) || "-" : makeGetParam(sourcesList, sourceType) || "-";
-        const categoryParam = type === categoryType ? makeGetParam(data, categoryType) || "" : makeGetParam(categoriesList, categoryType) || "";
-        let searchParam = "-";
+        const sourceParam = type === sourceType ? makeGetParam(data, sourceType, currentURL)
+                                                : makeGetParam(sourcesList, sourceType, currentURL);
+        currentURL += sourceParam;
         /* while searching for a source , the term parameter is ignored because they are incompatible */
-        if(sourceParam === "-"){
-            searchParam = searchText ? `q=${searchText}` : "-";
+        if(sourceParam === ""){
+            currentURL += searchParam = searchText ? `?q=${searchText}` : "";
         }
-        const searchData = [
-            offset, limit, "-",
-            countryParam, categoryParam, sourceParam,
-        ];
+
+        const countryParam = type === countryType ? makeGetParam(data, countryType, currentURL)
+                                                  : makeGetParam(countriesList, countryType, currentURL);
+        currentURL += countryParam;
+
+        const categoryParam = type === categoryType ? makeGetParam(data, categoryType, currentURL)
+                                                    : makeGetParam(categoriesList, categoryType, currentURL);
+        currentURL += categoryParam;
+
+        const searchData = [offset, limit, searchParam, countryParam, categoryParam, sourceParam];
         dispatch(search_news(...searchData));
-        history.push(`/search/${sourceParam}/${searchParam}/${countryParam}/${categoryParam}`);
+        history.push(`/search/${currentURL}`);
     }
 
-    const makeGetParam = (data, type) => {
-        let param = `${type}=`;
-        let val = data.join(',');
-
-        if(data.length > 0){
-            return param + val;
-        }
-        return "";
-    }
-
-    const getSelectedParams = (text, param) => {
-        if(text && text.includes(param)){
-            return text.replace(param, "").split(",");
+    const getSelectedParams = (text) => {
+        if(text && text !== ""){
+            return text.split(",");
         }
         return false;
     }
@@ -156,7 +166,10 @@ const SearchFilter = () => {
     return (
         <Row>
             <Col span={24}>
-                <Button type="dashed" onClick={clearFilters}><UndoOutlined /> Clear</Button>
+                <div className="action-buttons-block">
+                    <Button type="dashed" onClick={clearFilters}><UndoOutlined /> Clear</Button>
+                    <Button type="dashed"><Link to="/"><ArrowLeftOutlined /> Back to sources</Link></Button>
+                </div>
             </Col>
             <Col span={24} className="search-box">
                 <Form

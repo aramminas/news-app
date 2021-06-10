@@ -13,7 +13,7 @@
   position: relative;
   padding: 15px;
   box-shadow: rgba(60, 64, 67, 0.3) 0 1px 2px 0, rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
-  background-color: #c4c4c41c;
+  background: linear-gradient(to right, #ffffff, #c4c4c41c);
   height: 100%;
 
   & .ant-descriptions-header {
@@ -60,5 +60,5 @@
   position: relative;
   padding: 15px;
   box-shadow: rgba(60, 64, 67, 0.3) 0 1px 2px 0, rgba(60, 64, 67, 0.15) 0 1px 3px 1px;
-  background-color: #c4c4c41c;
+  background: linear-gradient(to right, #c4c4c41c, #ffffff);
 }

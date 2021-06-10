@@ -14,7 +14,7 @@ export default function App() {
                 <Route exact={true} path="/">
                     <Home />
                 </Route>
-                <Route path="/search/:id?/:q?/:country?/:category?/:language?">
+                <Route path="/search">
                     <SearchArea/>
                 </Route>
                 <Route path="/news/:source/:author">

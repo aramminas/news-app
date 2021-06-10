@@ -72,7 +72,7 @@ const Home = () => {
                     { show.map(source => (
                         <Col span={8} key={source.id}>
                             <Card
-                                title={<span><Link to={`/search/${sourceType}=${source.id}`}>{source.name}</Link></span>}
+                                title={<span><Link to={`/search/?${sourceType}=${source.id}`}>{source.name}</Link></span>}
                                 actions={[
                                     <span>{categories[source.category]}</span>,
                                     <span>{languages[source.language]}</span>,

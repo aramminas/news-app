@@ -22,9 +22,9 @@ const SearchNews = () => {
     const [width, setWidth] = useState('');
 
     const searchUpdated = (val) => {
-        const searchP = `${searchType}=${val}`
+        const searchP = `?${searchType}=${val}`
         dispatch(search_news(offset, limit, searchP));
-        history.push(`/search/-/${val}`);
+        history.push(`/search/?q=${val}`);
     }
 
     const resizeInput = (type) => {
